@@ -1,0 +1,262 @@
+\chapter{Axioma cuánticos}\label{ch:axioma-cuánticos}
+
+En esta sección, vamos a enunciar los axiomas de la mecánica cuántica, los cuales no son resultado de ningún proceso deductivo logico-matemático de conceptos previos.
+Son las reglas a las que hemos llegado tras años de observación y experimentación.
+
+Nos centraremos en detallar como estos axiomas se traslada al campo de la computación cuántica.
+
+\section{Axioma 1. Espacio de estados}\label{sec:axioma-1.-espacio-de-estados}
+\begin{definition}[Axioma 1]
+	El estado de un sistema cuántico, está determinado por un vector unitario de un $\C$ espacio de Hilbert separable, que llamamos \define{espacio de estados}{Espacio de estados} y lo denotamos por $\E$.
+\end{definition}
+
+Usando la notación de Dirac, un elemento de $\E$, se llama \define{ket}{Ket} y lo denotamos por $\ket{a}$.
+
+El conjugado de un número complejo $\alpha$, lo denotaremos por $\alpha^*$, y llamaremos conjugado de un ket, al ket cuyas componentes son las componentes conjugadas.
+El vector traspuesto de un ket $\ket{a}$ lo denotamos por $\transpose{̣\ket{a}}$.
+La matriz columna asociada a $\ket{a}$ la denotamos por $\ketm{a}$.
+
+En computación cuántica, el espacio de estados para un sólo cúbit tiene dimensión 2 y la base ortonormal canónica de $\E$ está formado por los estados $\ketC$ y $\ketU$, o de forma genérica  $\set{\ket{i}}$.
+
+\subsection{Producto interno}\label{subsec:producto-interno}
+El producto interno de un espacio de estados es hermitiano y como una aplicación $f$ de $\E\times\E$ en $\C$ cumple:
+\begin{equation*}
+	\begin{split}
+		f(\ket{a},\ket{b}) & =f(\ket{b}, \ket{a})^* \\
+		f(\alpha\ket{a}, \beta\ket{b}) & =\alpha^*\beta f(\ket{a}, \ket{b}) \\
+		f(\ket{a}+\ket{a^\prime}, \ket{b}+\ket{b^\prime}) &=f(\ket{a},\ket{b})+f(\ket{a^\prime}, \ket{b})+f(\ket{a},\ket{b^\prime})+f(\ket{a^\prime}, \ket{b^\prime})
+	\end{split}
+\end{equation*}
+
+Usando la notación de Dirac, denotaremos al producto interno $f(\ket{a}, \ket{b})$ por $\braket{a}{b}$.
+
+Para la base canónica $\set{\ket{i}}$, todo ket $\ket{a}$ es expresado como combinación lineal $\ket{a}=\sum_{i} a_i\ket{i}$, para ciertos valores $a_i\in\C$, como la base es ortonormal entonces se cumple que $a_i=\braket{i}{a}$, por lo que expresaremos un ket con respecto a dicha base como:
+
+\begin{equation}
+	\label{eq:ket-dirac}
+	\ket{a}=\sum_i\braket{i}{a}\ket{i}
+\end{equation}
+
+La expresión matricial del ket con respecto a la base canónica tiene la expresión
+\begin{equation}
+	\label{eq:ket-matriz}
+	\ketm{a}=(\braket{i}{a})_i
+\end{equation}
+
+En computación cuántica, el producto directo se define como:
+\begin{equation}
+	\label{eq:producto-interno-definicion}
+	\braket{a}{b}=\sum_i \braket{i}{a}^*\braket{i}{b}
+\end{equation}
+
+\subsection{El espacio dual}\label{subsec:el-espacio-dual}
+El \define{espacio dual}{Espacio dual} $\E^*$, es el espacio vectorial de todas las aplicaciones lineales de $\E$ en $\C$.
+
+Un resultado importante, es el teorema de Riesz, que demuestra que $\E$ y $\E^*$ son conjugados isomorfos, definiendo dicho isomorfismo $\maps{G}{\E}{\E^*}$ a través del producto interno, es decir $G(\ket{a})(\ket{b})=\braket{a}{b}$.
+
+Usando la notación de Dirac, un elemento del espacio dual, se llama \define{bra}{Bra} y lo denotamos por $\bra{a}=G(\ket{a})$.
+
+Si $\set{\ket{i}}$ es la base canónica de $\E$, tenemos que $\set{\bra{i}}$ es una base de $\E^*$ que la llamaremos base canónica de $\E^*$.
+
+Dado un bra, con respecto a la base canónica, se expresa como $\bra{a}=\sum_{i}\alpha_i\bra{i}$.
+Si calculamos como $\bra{a}$ actua sobre un elemento de la base tenemos que:
+\begin{equation*}
+	\bra{a}(\ket{i})=\braket{a}{i}= \braket{i}{a}^*
+\end{equation*}
+Por otra parte tenemos que
+\begin{equation*}
+	\bra{a}(\ket{i})=\sum_{j}\alpha_j\bra{j}(\ket{i}) = \sum_{j}\alpha_j\braket{j}{i} = \alpha_i
+\end{equation*}
+
+Por lo tanto tenemos que
+\begin{equation}
+	\label{eq:bra-dirac}
+	\bra{a}=\sum_i\braket{i}{a}^*\bra{i}
+\end{equation}
+
+La matriz fila asociada a un bra la denotamos por $\bram{a}$ y con respecto a la base canónica tiene la expresión
+\begin{equation}
+	\label{eq:bra-matriz}
+	\bram{a}=(\braket{i}{a}^*)_i
+\end{equation}
+
+Por tanto, el producto interno se puede expresar en notación matricial como
+\begin{equation}
+	\label{eq:producto-interno-matriz}
+	\braket{a}{b}=\bram{a}\ketm{b}
+\end{equation}
+
+\section{Axioma 2. Operadores autoadjuntos}\label{sec:axioma-2.-operadores-autoadjuntos}
+\begin{definition}[Axioma 2]
+	A cada magnitud física que se puede medir de un sistema cuántico, viene caracterizado por un operador autoadjunto que llamamos observables.
+\end{definition}
+Así por ejemplo, los equivalentes cuánticos de la posición $x$ o el momento $p$ en mecánica clásica, vienen representados por el operador posición $\hat{x}$ o el operador momento $\hat{p}$.
+
+En computación cuántica, todos los operadores están acotados, es decir, $\maps{\hat{A}}{\E}{\E}$ está \define{acotado}{Acotado, operador} si  $\exists c\in\C\tq\norm{\hat{A}(\ket{a})}\leq c\norm{\ket{a}}$.
+Para cualquier operador acotado $\hat{A}$ existe un único operador acotado $\hat{B}$ que cumple $\braket{a}{\hat{A}(\ket{b})}=\braket{\hat{B}(\ket{a})}{b}$, llamaremos a dicho operador $\hat{B}$, operador \define{adjunto}{Adjunto, operador} de $\hat{A}$ y lo denotaremos por $\hat{A}^\dagger$.
+Diremos que $\hat{A}$ es un operador \define{autoadjunto}{Autoadjunto, operador} si $\hat{A}=\hat{A}^\dagger$.
+
+\subsection{Producto externo}\label{subsec:producto-externo}
+Sea $\ket{a}$ un ket y $\bra{b}$ un bra, se define el producto exterior $\ketbra{a}{b}$ como la aplicación lineal de espacios vectoriales definida por
+\begin{equation}
+	\label{eq:producto-externo}
+	\begin{split}
+		\mapsdef{\ketbra{a}{b}}{\E}{\E}{\ket{c}}{\braket{b}{c}\ket{a}}
+	\end{split}
+\end{equation}
+
+\begin{exercise}
+	Demostrar que $\ketbra{a}{b}$ es un aplicación lineal, es decir:
+	$\ketbra{a}{b}(\lambda_1\ket{c_1}+\lambda_2\ket{c_2})=\lambda_1\ketbra{a}{b}(\ket{c_1})+\lambda_2\ketbra{a}{b}(\ket{c_2})$. $\forall \ket{a}, \ket{b}, \ket{c_1}, \ket{c_2}\in\E$ $\forall\lambda_1,\lambda_2\in\C$.
+\end{exercise}
+\begin{exercise}
+	Demostrar que:
+	\begin{enumerate}
+		\item $\ketbra{\lambda_1\ket{a_1}+\lambda_2\ket{a_2}}{b}=\lambda_1\ketbra{a_1}{b}+\lambda_2\ketbra{a_2}{b}$. $\forall \ket{a_1}, \ket{a_2}, \ket{b}\in\E$ $\forall\lambda_1,\lambda_2\in\C$.
+		\item $\ketbra{a}{\lambda_1\ket{b_1}+\lambda_2\ket{b_2}}=\lambda_1^*\ketbra{a}{b_1}+\lambda_2^*\ketbra{a}{b_2}$. $\forall \ket{a}, \ket{b_1}, \ket{b_2}\in\E$ $\forall\lambda_1,\lambda_2\in\C$.
+	\end{enumerate}
+\end{exercise}
+En coordenadas respecto de una base $\set{\ket{i}}$, tenemos que:
+\begin{equation}
+	\label{eq:producto-externo-dirac}
+	\ketbra{a}{b} = \sum_{i}\sum_{j}\braket{i}{a}\braket{j}{b}^*\ketbra{i}{j}
+\end{equation}
+
+Usando que $\sum_i \ketbra{i}{i}$ es el operador identidad, se puede demostrar que $\set{\ketbra{i}{j}}$ es una base ortonormal de los observables y que llamaremos base canónica.
+
+\begin{definition}
+	Diremos que un operador $\hat{A}$ es \define{puro}{Puro, operador} si existen $\ket{a}\in\E$ y $\bra{b}\in\E^*$ tal que $\hat{A}=\ketbra{a}{b}$.
+\end{definition}
+
+\subsection{Significado del producto externo}\label{subsec:significado-del-producto-externo}
+
+Sea $\set{\ket{i}}$ la base canónica de $\E$, por definición $\ketbra{i}{j}\left(\ket{a}\right)=\braket{j}{a}\ket{i}$, es decir, $\ketbra{i}{j}$ toma la $j$-ésima coordenada de $\ket{a}$ y la proyecta sobre la $i$-ésima coordenada, dejando a cero el resto de coordenadas.
+
+Por lo tanto aplicado sobre un ket $\ket{c}$ tenemos
+\begin{equation}
+	\label{eq:producto-externo-ket-coordenadas}
+	\ketbra{a}{b}\left( \ket{c} \right)~\by{\ref{eq:producto-externo-dirac}} \sum_{i}\sum_{j}\braket{i}{a}\braket{j}{b}^*\ketbra{i}{j}\left( \ket{c} \right)=\sum_{i}\sum_{j}\braket{i}{a}\braket{j}{b}^*\braket{j}{c}\ket{i}
+\end{equation}
+
+\subsection{Observables como matriz}\label{subsec:observables-como-matriz}
+Como toda aplicación lineal, podemos asociar a cada observable $\hat{A}$ una matriz $A$ y denotaremos sus entradas por $\matrixelement{i}{A}{j}$.
+
+En caso de observables puros, por~\eqref{eq:producto-externo-dirac}, tenemos que $\matrixelement{i}{A}{j}=\braket{i}{a}\braket{j}{b}^*$ y en este caso lo denotaremos por $\ketbramelement{a}{b}{i}{j}$ y la matriz asociada es $\ketbram{a}{b}$.
+
+La imagen de un observable de un ket en expresión matricial es
+\begin{equation}
+	\label{eq:imagen-observable-ket-matriz}
+	\hat{A}(\ket{b})=A\ketm{b}
+\end{equation}
+
+\subsection{Definiciones y resultados para observables}\label{subsec:definiciones-y-resultados-para-observables}
+
+\begin{definition}
+	Sea $\hat{A}$ un observable, definimos la \define{traspuesta hermitiana}{Transpuesta hermitiana} $\hat{A}^\dag$ como aquel que tiene como matriz asociada la matriz transpuesta hermitiana de $\hat{A}$.
+\end{definition}
+
+Como la matriz asociada de $\ketbra{a}{b}$ es $(\ketbramelement{a}{b}{i}{j})_{ij}$, la matriz traspuesta hermitiana es $(\ketbramelement{a}{b}{i}{j})_{ij}^\dag = (\braket{i}{a}\braket{j}{b}^*)_{ij}^\dag=(\braket{j}{a}^*\braket{i}{b})_{ij}=(\braket{i}{b}\braket{j}{a}^*)_{ij}=(\ketbramelement{b}{a}{i}{j})_{ij}$ que es la matriz asociada a $\ketbra{b}{a}$, es decir
+\begin{equation}
+	\label{eq:traspuesta-hermitiana-producto-externo}
+	\ketbra{a}{b}^\dag = \ketbra{b}{a}
+\end{equation}
+
+\begin{definition}
+	Un observables se dice \define{hermitiano}{Observable hermitiano} si es igual a su traspuesta hermitiana.
+\end{definition}
+
+Si $\hat{A}$ es hermitiano, tenemos que $\matrixelement{i}{A}{j}=\matrixelement{j}{A}{i}^*$.
+En particular para la diagonal $\matrixelement{i}{A}{i}=\matrixelement{i}{A}{i}^*$ nos dice que la diagonal está formada por números reales.
+
+\begin{definition}
+	Un observable se dice \define{unitario}{Observable unitario} si su traspuesta hermitiana es su inversa.
+\end{definition}
+
+\begin{definition}
+	Un observable se dice \define{normal}{Observable normal} si conmuta con su traspuesta hermitiana.
+\end{definition}
+
+\section{Axioma 3. Colapso de onda}\label{sec:axioma-3.-colapso-de-onda}
+\begin{definition}[Axioma 3]
+	Dado un estado cuántico $\ket{a}$ de $\E$ y $\hat{A}$ un observable, medir el valor de $\hat{A}$ sobre $\ket{a}$ da como resultado un nuevo estado cuántico $\ket{b}$ tal que $\hat{A}(\ket{b})=\lambda\ket{b}$ para algún $\lambda\in\R$.
+	El paso del estado $\ket{a}$ a $\ket{b}$ se llama \define{colapso de onda}{Colapso de onda}.
+\end{definition}
+Así pues, observar un estado cuántico, nos devuelve un autoestado para algún autovalor, pero ¿que significa exactamente esta condición?.
+
+Resultados sobre autovalores y autovectores.
+Que los autovalores de una matriz autoadjunta son reales.
+
+\section{Axioma 4. Valor esperado}\label{sec:axioma-4.-valor-esperado}
+\begin{definition}[Axioma 4]
+	Dado un estado cuántico $\ket{a}$ de $\E$ y un observable $\hat{A}$, el valor esperado en la medición cumple $E_a(\hat{A})=\braket{a}{\hat{A}(\ket{a})}$.
+\end{definition}
+Otras formas de denotar el valor esperado en la medida es $\ev{\hat{A}}{a}$ o usando la matriz asociada $\ev{A}{a}$.
+
+Podemos calcular el valor esperado de la medida de forma matricial
+\begin{equation}
+	\label{eq:valor-esperado-matriz}
+	\ev{A}{a}=\bram{a}A\ketm{a}
+\end{equation}
+
+Como todo observable $\hat{A}$ es de la forma $\sum_{ij}\matrixelement{i}{A}{j}\ketbra{i}{j}$, obtenemos:
+
+\begin{equation}
+	\label{eq:valor-esperado}
+	\begin{align}
+		E_a(\hat{A}) & =\braket{a}{\hat{A}(\ket{a})}=\sum_{ij}\matrixelement{i}{A}{j}\braket{a}{\ketbra{i}{j}(\ket{a})}=\sum_{ij}\matrixelement{i}{A}{j}\braket{j}{a}\braket{i}{a}^* \\
+		& =\sum_{ij}\matrixelement{i}{A}{j}\ketbramelement{a}{a}{j}{i}=\sum_{i}(A\ketbram{a}{a})_i=\tr(A\ketbram{a}{a})
+	\end{align}
+\end{equation}
+
+\subsection{Traza}\label{subsec:traza}
+Definimos la \define{traza}{Traza} de un observable, como la traza de la matriz asociada.
+Para un observable puro tenemos:
+\begin{equation}
+	\label{eq:traza-observable-puro}
+	\tr(\ketbra{a}{b})=\tr(\left(\ketbramelement{a}{b}{i}{j}\right)_{ij})=\sum_i\ketbramelement{a}{b}{i}{i}=\sum_i\braket{i}{a}\braket{i}{b}^*=\braket{b}{a}
+\end{equation}
+
+Diremos que un operador $\hat{A}$ es \define{proyectivo}{Proyectivo, operador} si existe un ket $\ket{a}$ tal que $\hat{A}=\ketbra{a}{a}$.
+Diremos además que $\hat{A}$ es la proyección sobre $\ket{a}$.
+
+\begin{proposition}
+	Un observable $\hat{A}$ es proyectivo si y sólo si cumple:
+	\begin{enumerate}
+		\item Es hermitiano. $\hat{A}=\hat{A}^\dagger$.
+		\item Su traza vale uno. $\tr(\hat{A})=1$.
+		\item Es positivo. $E_a(\hat{A})\geqslant 0\ \forall\ket{a}\in\E$.
+	\end{enumerate}
+\end{proposition}
+
+\section{Axioma 5. Probabilidad}\label{sec:axioma-5.-probabilidad}
+\begin{definition}[Axioma 5]
+	Dado un estado $\ket{a}=\sum_i \braket{i}{a}\ket{i}$, la probabilidad al medir de obtener el estado $\ket{i}$ es $\ev{\hat{P}_i}{a}$, donde $\hat{P}_i = \ketbra{i}{i}$.
+	Además el sistema queda determinado por el estado $\frac{\hat{P}_i(\ket{a})}{\sqrt {\ev{\hat{P}_i}{a}}}$.
+\end{definition}
+
+Podemos observar que $\ev{\hat{P}_i}{a}=\braket{a}{\hat{P}_i(\ket{a})}=\braket{a}{\braket{i}{a}\ket{i}}=\braket{i}{a}\braket{a}{i}=\braket{i}{a}\braket{i}{a}^*=\norm{\braket{i}{a}}^2$.
+
+Además, si el valor observado es $\ket{i}$ el estado del sistema queda como $\frac{\braket{i}{a}}{\norm{\braket{i}{a}}}\ket{i}$.
+
+En general, si $\hat{A}$ es un observable, y $\ket{a}$ un estado observado por $\hat{A}$, la probabilidad de que al observar con $\hat{A}$ a cualquier estado $\ket{b}$ se obtenga $\ket{a}$ es $\norm{\braket{a}{b}}^2$.
+
+\section{Resumen notación cuántica}\label{sec:resumen-notacion-cuantica}
+\begin{table}[htbp]
+	\caption{Notación vectorial\label{tab:notacion-vectorial}}
+	\centering
+	\begin{tabular}{ccccccc}
+		\toprule
+		Concepto                 & Nomenclatura & Notación              & Matriz asociada        \\
+		\midrule
+		Vector                     & ket          & $\ket{a}$             & $\ketm{a}$             \\
+		Vector traspuesto          &              & $\transpose{\ket{a}}$ & $\transpose{\ketm{a}}$ \\
+		Conjugado                  &              & $\ket{a}^*$           & $\ketm{a}^*$           \\
+		Conjugado traspuesto       &              & $\ket{a}^\dag$        & $\ketm{a}^\dag$        \\
+		Vector dual                & bra          & $\bra{a}$             & $\bram{a}$             \\
+		Norma                      &              & $\norm{a}$            &                        \\
+		Producto escalar o interno & braket       & $\braket{a}{b}$       &                        \\
+		Producto externo           & ketbra       & $\ketbra{a}{b}$       & $\ketbram{a}{b}$       \\
+		Valor esperado             &              & $\ev{a}{b}$           &                        \\
+		\bottomrule
+	\end{tabular}
+\end{table}

@@ -30,4 +30,7 @@
 \providecommand{\transpose}[1]{#1^\text{T}}
 \providecommand{\ketC}{\ket{0}}
 \providecommand{\ketU}{\ket{1}}
-\providecommand{\ketbramatrix}[4]{\ketbra{#1}{#2}^{#3}_{#4}}
+\providecommand{\ketbramelement}[4]{\ketbra{#1}{#2}_{#3}^{#4}}
+\providecommand{\ketm}[1]{\left(#1\right>}
+\providecommand{\bram}[1]{\left<#1\right)}
+\providecommand{\ketbram}[2]{\ketm{#1}\bram{#2}}

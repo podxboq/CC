@@ -1,0 +1,34 @@
+\chapter{Definiciones cuánticas}\label{ch:definiciones-cuánticas}
+
+\section{Definiciones básicas}\label{sec:definiciones-basicas}
+
+\subsection{Cúbit $\ket{+}$ y $\ket{-}$}\label{subsec:cúbit-$ket{+}$-y-$ket{-}$}
+
+\begin{definition}[Cúbit $\ket{+}$ y $\ket{-}$]
+	Definimos el ket $\ket{+}=\frac{\ketC+\ketU}{\sqrt{2}}$ y el ket $\ket{-}=\frac{\ketC-\ketU}{\sqrt{2}}$.
+\end{definition}
+
+\begin{exercise}
+	Demostrar que $\set{\ket{+}, \ket{-}}$ es una base de $\E$.
+	Llamamos \define{base hadamard}{Base Hadamard} a esta base.
+\end{exercise}
+
+La matriz cambio de base de la canónica a la direccional es $\frac{1}{2}\mqty(1 & 1 \\ 1 & -1)$, esta matriz es hermitiana y unitaria, por lo tanto esta matriz es también la matriz cambio de base de la direccional a la canónica.
+
+\subsection{Operadores de Pauli}\label{subsec:operadores-de-pauli}
+
+Los operadores de Pauli son 4 aplicaciones del espacio de estados del cúbit que vienen definido sobre la base canónica como:
+\begin{table}[htbp]
+	\caption{Operadores de Pauli\label{tab:operadores-de-pauli}}
+	\centering
+	\begin{tabular}{ccccccc}
+		\toprule
+		Nombre   & Alias         & Valor sobre $\ketC$ & Valor sobre $\ketU$ & Matriz asociada     & Producto exterior               \\
+		\midrule
+		$\sigma_0$ & I, $\sigma_I$ & $\ketC$             & $\ketU$             & $\mqty({\pmat{0}})$ & $\ketbra{0}{0}+\ketbra{1}{1}$   \\
+		$\sigma_1$ & X, $\sigma_x$ & $\ketU$             & $\ketC$             & $\mqty({\pmat{1}})$ & $\ketbra{0}{1}+\ketbra{1}{0}$   \\
+		$\sigma_2$ & Y, $\sigma_y$ & $i\ketU$            & $-i\ketC$           & $\mqty({\pmat{2}})$ & $i\ketbra{0}{1}-i\ketbra{1}{0}$ \\
+		$\sigma_3$ & Z, $\sigma_z$ & $\ketC$             & $-\ketU$            & $\mqty({\pmat{3}})$ & $\ketbra{0}{0}-\ketbra{1}{1}$   \\
+		\bottomrule
+	\end{tabular}
+\end{table}

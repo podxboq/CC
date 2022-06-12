@@ -12,17 +12,17 @@ Nos centraremos en detallar como estos axiomas se traslada al campo de la comput
 
 Usando la notación de Dirac, un elemento de $\E$, se llama \define{ket}{Ket} y lo denotamos por $\ket{a}$.
 
-El conjugado de un número complejo $\alpha$, lo denotaremos por $\alpha^*$, y llamaremos conjugado de un ket, al ket cuyas componentes son las componentes conjugadas.
-El vector traspuesto de un ket $\ket{a}$ lo denotamos por $\transpose{̣\ket{a}}$.
+El conjugado de un número complejo $\alpha$, lo denotaremos por $\alpha^*$, y dada una matriz $A$ denotaremos por $A^*$ a la matriz conjugada, $\transpose{̣A}$ a la matriz traspuesta y $A^\dagger$ a la matriz adjunta (la traspuesta conjugada).
 La matriz columna asociada a $\ket{a}$ la denotamos por $\ketm{a}$.
 
 En computación cuántica, el espacio de estados para un sólo cúbit tiene dimensión 2 y la base ortonormal canónica de $\E$ está formado por los estados $\ketC$ y $\ketU$, o de forma genérica  $\set{\ket{i}}$.
 
 \subsection{Producto interno}\label{subsec:producto-interno}
-El producto interno de un espacio de estados es hermitiano y como una aplicación $f$ de $\E\times\E$ en $\C$ cumple:
+El producto interno del espacio de estados es hermitiano y como una aplicación $f$ de $\E\times\E$ en $\C$ cumple:
 \begin{equation*}
 	\begin{split}
 		f(\ket{a},\ket{b}) & =f(\ket{b}, \ket{a})^* \\
+		f(\ket{a},\ket{a}) & \geq 0\text{ y } f(\ket{a},\ket{a}) = 0 \leftrightarrow \ket{a}=0 \\
 		f(\alpha\ket{a}, \beta\ket{b}) & =\alpha^*\beta f(\ket{a}, \ket{b}) \\
 		f(\ket{a}+\ket{a^\prime}, \ket{b}+\ket{b^\prime}) &=f(\ket{a},\ket{b})+f(\ket{a^\prime}, \ket{b})+f(\ket{a},\ket{b^\prime})+f(\ket{a^\prime}, \ket{b^\prime})
 	\end{split}
@@ -34,19 +34,13 @@ Para la base canónica $\set{\ket{i}}$, todo ket $\ket{a}$ es expresado como com
 
 \begin{equation}
 	\label{eq:ket-dirac}
-	\ket{a}=\sum_i\braket{i}{a}\ket{i}
+	\ket{a}=\sum_i\braket{i}{a}\ket{i}\so\ketm{a}=\smqty(\braket{0}{a}\\\braket{1}{a})
 \end{equation}
 
-La expresión matricial del ket con respecto a la base canónica tiene la expresión
-\begin{equation}
-	\label{eq:ket-matriz}
-	\ketm{a}=(\braket{i}{a})_i
-\end{equation}
-
-En computación cuántica, el producto directo se define como:
+En computación cuántica, el producto interno se define como:
 \begin{equation}
 	\label{eq:producto-interno-definicion}
-	\braket{a}{b}=\sum_i \braket{i}{a}^*\braket{i}{b}
+	\braket{a}{b}=\sum_i \braket{i}{a}^*\braket{i}{b}=\ketm{a}^\dagger\ketm{b}
 \end{equation}
 
 \subsection{El espacio dual}\label{subsec:el-espacio-dual}
@@ -77,7 +71,7 @@ Por lo tanto tenemos que
 La matriz fila asociada a un bra la denotamos por $\bram{a}$ y con respecto a la base canónica tiene la expresión
 \begin{equation}
 	\label{eq:bra-matriz}
-	\bram{a}=(\braket{i}{a}^*)_i
+	\bram{a}=(\braket{i}{a}^*)_i=\ketm{a}^\dagger
 \end{equation}
 
 Por tanto, el producto interno se puede expresar en notación matricial como
@@ -94,7 +88,16 @@ Así por ejemplo, los equivalentes cuánticos de la posición $x$ o el momento $
 
 En computación cuántica, todos los operadores están acotados, es decir, $\maps{\hat{A}}{\E}{\E}$ está \define{acotado}{Acotado, operador} si  $\exists c\in\C\tq\norm{\hat{A}(\ket{a})}\leq c\norm{\ket{a}}$.
 Para cualquier operador acotado $\hat{A}$ existe un único operador acotado $\hat{B}$ que cumple $\braket{a}{\hat{A}(\ket{b})}=\braket{\hat{B}(\ket{a})}{b}$, llamaremos a dicho operador $\hat{B}$, operador \define{adjunto}{Adjunto, operador} de $\hat{A}$ y lo denotaremos por $\hat{A}^\dagger$.
-Diremos que $\hat{A}$ es un operador \define{autoadjunto}{Autoadjunto, operador} si $\hat{A}=\hat{A}^\dagger$.
+
+Dado el operador $\hat{A}$, con matriz asociada $A$, el operador adjunto tiene como matriz asociada la matriz adjunta de $A$, es decir, la matriz asociada a $\hat{A}^\dagger$ es $A^\dagger$.
+
+\begin{definition}
+	Diremos que $\hat{A}$ es un operador \define{hermitiano}{Hermitiano, operador} o \define{autoadjunto}{Autoadjunto, operador} si $\hat{A}=\hat{A}^\dagger$.
+\end{definition}
+
+\begin{exercise}
+	Si $\hat{A}$ es hermitiano, comprobar que la diagonal está formada por números reales.
+\end{exercise}
 
 \subsection{Producto externo}\label{subsec:producto-externo}
 Sea $\ket{a}$ un ket y $\bra{b}$ un bra, se define el producto exterior $\ketbra{a}{b}$ como la aplicación lineal de espacios vectoriales definida por
@@ -106,9 +109,10 @@ Sea $\ket{a}$ un ket y $\bra{b}$ un bra, se define el producto exterior $\ketbra
 \end{equation}
 
 \begin{exercise}
-	Demostrar que $\ketbra{a}{b}$ es un aplicación lineal, es decir:
+	Demostrar que todo $\ketbra{a}{b}$ es un aplicación lineal, es decir:
 	$\ketbra{a}{b}(\lambda_1\ket{c_1}+\lambda_2\ket{c_2})=\lambda_1\ketbra{a}{b}(\ket{c_1})+\lambda_2\ketbra{a}{b}(\ket{c_2})$. $\forall \ket{a}, \ket{b}, \ket{c_1}, \ket{c_2}\in\E$ $\forall\lambda_1,\lambda_2\in\C$.
 \end{exercise}
+
 \begin{exercise}
 	Demostrar que:
 	\begin{enumerate}
@@ -149,53 +153,22 @@ La imagen de un observable de un ket en expresión matricial es
 	\hat{A}(\ket{b})=A\ketm{b}
 \end{equation}
 
-\subsection{Definiciones y resultados para observables}\label{subsec:definiciones-y-resultados-para-observables}
-
-\begin{definition}
-	Sea $\hat{A}$ un observable, definimos la \define{traspuesta hermitiana}{Transpuesta hermitiana} $\hat{A}^\dag$ como aquel que tiene como matriz asociada la matriz transpuesta hermitiana de $\hat{A}$.
-\end{definition}
-
 Como la matriz asociada de $\ketbra{a}{b}$ es $(\ketbramelement{a}{b}{i}{j})_{ij}$, la matriz traspuesta hermitiana es $(\ketbramelement{a}{b}{i}{j})_{ij}^\dag = (\braket{i}{a}\braket{j}{b}^*)_{ij}^\dag=(\braket{j}{a}^*\braket{i}{b})_{ij}=(\braket{i}{b}\braket{j}{a}^*)_{ij}=(\ketbramelement{b}{a}{i}{j})_{ij}$ que es la matriz asociada a $\ketbra{b}{a}$, es decir
 \begin{equation}
 	\label{eq:traspuesta-hermitiana-producto-externo}
 	\ketbra{a}{b}^\dag = \ketbra{b}{a}
 \end{equation}
 
-\begin{definition}
-	Un observables se dice \define{hermitiano}{Observable hermitiano} si es igual a su traspuesta hermitiana.
-\end{definition}
-
-Si $\hat{A}$ es hermitiano, tenemos que $\matrixelement{i}{A}{j}=\matrixelement{j}{A}{i}^*$.
-En particular para la diagonal $\matrixelement{i}{A}{i}=\matrixelement{i}{A}{i}^*$ nos dice que la diagonal está formada por números reales.
-
-\begin{definition}
-	Un observable se dice \define{unitario}{Observable unitario} si su traspuesta hermitiana es su inversa.
-\end{definition}
-
-\begin{definition}
-	Un observable se dice \define{normal}{Observable normal} si conmuta con su traspuesta hermitiana.
-\end{definition}
-
-\section{Axioma 3. Colapso de onda}\label{sec:axioma-3.-colapso-de-onda}
+\section{Axioma 3. Valor esperado}\label{sec:axioma-3.-valor-esperado}
 \begin{definition}[Axioma 3]
-	Dado un estado cuántico $\ket{a}$ de $\E$ y $\hat{A}$ un observable, medir el valor de $\hat{A}$ sobre $\ket{a}$ da como resultado un nuevo estado cuántico $\ket{b}$ tal que $\hat{A}(\ket{b})=\lambda\ket{b}$ para algún $\lambda\in\R$.
-	El paso del estado $\ket{a}$ a $\ket{b}$ se llama \define{colapso de onda}{Colapso de onda}.
+	Dado un estado cuántico $\ket{a}$ de $\E$ y un observable $\hat{A}$, el valor esperado en la medición cumple $E_a(\hat{A})=\braket{a}{\hat{A}^\dagger\hat{A}(\ket{a})}$.
 \end{definition}
-Así pues, observar un estado cuántico, nos devuelve un autoestado para algún autovalor, pero ¿que significa exactamente esta condición?.
-
-Resultados sobre autovalores y autovectores.
-Que los autovalores de una matriz autoadjunta son reales.
-
-\section{Axioma 4. Valor esperado}\label{sec:axioma-4.-valor-esperado}
-\begin{definition}[Axioma 4]
-	Dado un estado cuántico $\ket{a}$ de $\E$ y un observable $\hat{A}$, el valor esperado en la medición cumple $E_a(\hat{A})=\braket{a}{\hat{A}(\ket{a})}$.
-\end{definition}
-Otras formas de denotar el valor esperado en la medida es $\ev{\hat{A}}{a}$ o usando la matriz asociada $\ev{A}{a}$.
+Usando la notación de Dirac, otra forma de denotar el valor esperado en la medida es $\ev{\hat{A}^\dagger\hat{A}}{a}$.
 
 Podemos calcular el valor esperado de la medida de forma matricial
 \begin{equation}
 	\label{eq:valor-esperado-matriz}
-	\ev{A}{a}=\bram{a}A\ketm{a}
+	E_a(\hat{A})=\bram{a}A^\dagger A\ketm{a}
 \end{equation}
 
 Como todo observable $\hat{A}$ es de la forma $\sum_{ij}\matrixelement{i}{A}{j}\ketbra{i}{j}$, obtenemos:
@@ -203,8 +176,8 @@ Como todo observable $\hat{A}$ es de la forma $\sum_{ij}\matrixelement{i}{A}{j}\
 \begin{equation}
 	\label{eq:valor-esperado}
 	\begin{align}
-		E_a(\hat{A}) & =\braket{a}{\hat{A}(\ket{a})}=\sum_{ij}\matrixelement{i}{A}{j}\braket{a}{\ketbra{i}{j}(\ket{a})}=\sum_{ij}\matrixelement{i}{A}{j}\braket{j}{a}\braket{i}{a}^* \\
-		& =\sum_{ij}\matrixelement{i}{A}{j}\ketbramelement{a}{a}{j}{i}=\sum_{i}(A\ketbram{a}{a})_i=\tr(A\ketbram{a}{a})
+		E_a(\hat{A}) & =\braket{a}{\hat{A}^\dagger \hat{A}(\ket{a})}=\sum_{ij}\matrixelement{i}{A^\dagger A}{j}\braket{a}{\ketbra{i}{j}(\ket{a})}=\sum_{ij}\matrixelement{i}{A^\dagger A}{j}\braket{j}{a}\braket{i}{a}^* \\
+		& =\sum_{ij}\matrixelement{i}{A^\dagger A}{j}\ketbramelement{a}{a}{j}{i}=\sum_{i}(A^\dagger A\ketbram{a}{a})_i=\tr(A^\dagger A\ketbram{a}{a})
 	\end{align}
 \end{equation}
 
@@ -216,6 +189,7 @@ Para un observable puro tenemos:
 	\tr(\ketbra{a}{b})=\tr(\left(\ketbramelement{a}{b}{i}{j}\right)_{ij})=\sum_i\ketbramelement{a}{b}{i}{i}=\sum_i\braket{i}{a}\braket{i}{b}^*=\braket{b}{a}
 \end{equation}
 
+\subsection{Operadore proyectivos}\label{subsec:operadore-proyectivos}
 Diremos que un operador $\hat{A}$ es \define{proyectivo}{Proyectivo, operador} si existe un ket $\ket{a}$ tal que $\hat{A}=\ketbra{a}{a}$.
 Diremos además que $\hat{A}$ es la proyección sobre $\ket{a}$.
 
@@ -228,17 +202,42 @@ Diremos además que $\hat{A}$ es la proyección sobre $\ket{a}$.
 	\end{enumerate}
 \end{proposition}
 
-\section{Axioma 5. Probabilidad}\label{sec:axioma-5.-probabilidad}
-\begin{definition}[Axioma 5]
-	Dado un estado $\ket{a}=\sum_i \braket{i}{a}\ket{i}$, la probabilidad al medir de obtener el estado $\ket{i}$ es $\ev{\hat{P}_i}{a}$, donde $\hat{P}_i = \ketbra{i}{i}$.
-	Además el sistema queda determinado por el estado $\frac{\hat{P}_i(\ket{a})}{\sqrt {\ev{\hat{P}_i}{a}}}$.
+Los operadores proyectivos más importantes, y que usaremos habitualmente, son los que proyectan sobre el subespacio generado por los vectores propios del observable.
+
+Como los observables son hermitianos, son diagonalizables y por el teorema espectral, el espacio de estados se puede poner como suma directa de los subespacios generador por los valores propios.
+
+Sea $\hat{A}$ un observable, $\text{sp}(\hat{A})=\set{\alpha_i \in\C}$ el conjunto de sus valores propios y $\E_i$ el subespacio generado por el valor propio $\alpha_i$, consideremos los operadores proyectivos sobre cada subespacio $\maps{\hat{P}_i}{\E}{\E_i}$ el teorema de descomposición espectral nos asegura que
+\begin{equation}
+	\label{eq:suma_directa_subespacios_estados}
+	\E=\bigoplus\E_i\text{ y }\sum\hat{P}_i=I
+\end{equation}
+
+Una propiedad importante de los operadores proyectivos, es que son idempotente, junto con el echo de que son hermitianos, tenemos que $\hat{P}^\dagger\hat{P}=\hat{P}$.
+
+\section{Axioma 4. Colapso de onda}\label{sec:axioma-4.-colapso-de-onda}
+\begin{definition}[Axioma 4]
+	Dado un estado cuántico $\ket{a}$ de $\E$ y $\hat{A}$ un observable, medir el valor de $\hat{A}$ sobre $\ket{a}$ da como resultado un nuevo estado cuántico $\ket{b}$ tal que $\hat{A}(\ket{b})=\lambda\ket{b}$ para algún $\lambda\in\R$.
+	El paso del estado $\ket{a}$ a $\ket{b}$ se llama \define{colapso de onda}{Colapso de onda}.
 \end{definition}
+Así pues, observar un estado cuántico, nos devuelve un autoestado para algún autovalor, pero ¿que significa exactamente este axioma?.
+
+\begin{proposition}
+	Sea $\E$ un espacio de estados, $\ket{a}$ un estado cuántico, $\hat{A}$ un observable y $\set{\alpha_i\in\C}$ su espectro.
+	La probabilidad de observar el autovalor $\alpha_i$ es $\ev{\hat{P_i}}{a}$ y en cuyo caso el estado queda definido por $\frac{\hat{P_i}(\ket{a})}{\sqrt {\ev{\hat{P_i}}{a}}}$.
+\end{proposition}
 
 Podemos observar que $\ev{\hat{P}_i}{a}=\braket{a}{\hat{P}_i(\ket{a})}=\braket{a}{\braket{i}{a}\ket{i}}=\braket{i}{a}\braket{a}{i}=\braket{i}{a}\braket{i}{a}^*=\norm{\braket{i}{a}}^2$.
 
 Además, si el valor observado es $\ket{i}$ el estado del sistema queda como $\frac{\braket{i}{a}}{\norm{\braket{i}{a}}}\ket{i}$.
 
-En general, si $\hat{A}$ es un observable, y $\ket{a}$ un estado observado por $\hat{A}$, la probabilidad de que al observar con $\hat{A}$ a cualquier estado $\ket{b}$ se obtenga $\ket{a}$ es $\norm{\braket{a}{b}}^2$.
+En general, si $\hat{A}$ es un observable, la probabilidad de que al observar con $\hat{A}$ a cualquier estado $\ket{b}$ se obtenga $\ket{a}$ es $\norm{\braket{a}{b}}^2$.
+
+\section{Axioma 5. Evolución temporal}\label{sec:axioma-5.-evolucion-temporal}
+\begin{definition}[Axioma 5]
+	La evolución temporal de un estado cuántico se describe mediante una transformación unitaria.
+\end{definition}
+
+Si el estado de un sistema es $\bra{a}$ en un momento $t_0$, y pasado un tiempo $t_1$ se encuentra en el estado $\bra{b}$, entonces $\bra{b}=\hat{U}(\bra{a})$, donde $\hat{U}$ sólo depende de $t_0$ y $t_1$.
 
 \section{Resumen notación cuántica}\label{sec:resumen-notacion-cuantica}
 \begin{table}[htbp]
